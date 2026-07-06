@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviv Cohen — Graphic Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Familjen+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1efed;
+    --ink:#2c2c30;
+    --ink-soft:#5a5a60;
+    --ink-faint:#9a9a9f;
+    --line:rgba(40,40,45,.12);
+    --blob-a:#4b54e8;   /* blue  */
+    --blob-b:#ff4d4d;   /* red   */
+    --blob-c:#8a7bff;   /* violet*/
+    --display:'Hanken Grotesk', sans-serif;
+    --body:'Familjen Grotesk', sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --maxw:1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);background:var(--bg);color:var(--ink);
+    min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- BLOBS: anchored per-section, scroll WITH the page, gentle drift ---------- */
+  .sec-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+  #project .sec-bg{overflow:hidden}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
+
+  #home .blob.blue{width:42vw;height:54vh;left:29%;top:24%;
+    background:radial-gradient(circle at 50% 45%, var(--blob-a) 0%, rgba(75,84,232,0) 66%);
+    opacity:.9;animation:driftA 26s ease-in-out infinite;}
+  #home .blob.pink{width:34vw;height:34vw;left:-12%;bottom:8%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 62%);
+    opacity:.55;animation:driftB 30s ease-in-out infinite;}
+
+  #works .blob.blue{width:32vw;height:32vw;right:-8%;top:2%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 62%);
+    opacity:.45;animation:driftA 30s ease-in-out infinite;}
+  #works .blob.red{width:40vw;height:40vw;left:-6%;top:-14%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
+    opacity:.8;animation:driftB 28s ease-in-out infinite;}
+  #works .blob.pink{width:34vw;height:34vw;left:-8%;top:14%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 62%);
+    opacity:.45;animation:driftB 34s ease-in-out infinite;}
+
+  #about .blob.red{width:38vw;height:38vw;left:-6%;top:-2%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
+    opacity:.8;animation:driftB 28s ease-in-out infinite;}
+  #about .blob.blue{width:36vw;height:28vh;left:34%;top:-12%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 64%);
+    opacity:.6;animation:driftA 32s ease-in-out infinite;}
+
+  #project .blob.violet{width:36vw;height:36vw;right:-10%;top:5%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-c) 0%, rgba(138,123,255,0) 62%);
+    opacity:.38;animation:driftA 32s ease-in-out infinite;}
+  #project .blob.pink{width:30vw;height:30vw;left:-10%;top:60%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 62%);
+    opacity:.28;animation:driftB 36s ease-in-out infinite;}
+
+  #allworks .blob.red{width:34vw;height:34vw;left:-8%;top:-10%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
+    opacity:.5;animation:driftB 28s ease-in-out infinite;}
+  #allworks .blob.blue{width:30vw;height:30vw;right:-8%;bottom:-6%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 62%);
+    opacity:.4;animation:driftA 32s ease-in-out infinite;}
+
+  @keyframes driftA{0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(-3%,2.5%) scale(1.035)}66%{transform:translate(2.5%,-2%) scale(.99)}}
+  @keyframes driftB{0%,100%{transform:translate(0,0) scale(1)}
+    50%{transform:translate(3.5%,-3%) scale(1.04)}}
+
+  /* ---------- CHROME (fixed nav + corner labels) ---------- */
+  .chrome{transition:opacity .4s var(--ease)}
+  body.project-open .chrome{opacity:0;pointer-events:none}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;align-items:center;gap:2.1rem;padding:1.4rem 2rem;
+    font-size:1.02rem;letter-spacing:.01em;}
+  nav .links{display:flex;gap:2.1rem}
+  nav a{color:var(--ink);text-decoration:none;position:relative;cursor:pointer;transition:opacity .25s;}
+  nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:1.5px;width:0;
+    background:var(--ink);transition:width .3s var(--ease);}
+  nav a:hover::after, nav a.active::after{width:100%}
+  nav a:not(.active):hover{opacity:.6}
+
+  .corner{position:fixed;bottom:0;z-index:20;font-family:var(--display);font-weight:400;
+    font-size:clamp(1.7rem,4vw,3.1rem);line-height:.9;color:var(--ink);
+    letter-spacing:-.01em;padding:0 1.6rem 1.1rem;pointer-events:none;
+    transition:opacity .5s var(--ease);}
+  .corner.left{left:0}
+  .corner.right{right:0;color:var(--ink-soft)}
+  body[data-section="works"] .corner{opacity:0}
+
+  /* ---------- SECTIONS (one continuous scroll) ---------- */
+  main{position:relative;z-index:10;overflow:clip}
+  .section{position:relative}
+  .sec-inner{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+
+  /* HOME */
+  #home{display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .skills{position:relative;z-index:1;width:min(460px,74vw);height:min(460px,60vh);transform:translateY(3vh)}
+  .skill{position:absolute;color:#fff;font-family:var(--display);font-weight:400;
+    font-size:clamp(1.05rem,1.8vw,1.6rem);letter-spacing:.01em;cursor:default;
+    transition:.35s var(--ease);text-shadow:0 1px 26px rgba(40,40,90,.25);
+    animation:float 7s ease-in-out infinite;}
+  .skill:hover{transform:scale(1.08);letter-spacing:.06em}
+  .skill.s1{top:10%;left:18%}
+  .skill.s2{top:38%;right:2%;animation-delay:1.4s}
+  .skill.s3{top:58%;left:6%;animation-delay:.7s}
+  .skill.s4{top:84%;left:42%;animation-delay:2.1s;color:rgba(255,255,255,.85)}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+  /* WORKS */
+  #works .sec-inner{padding:5rem 2rem 7rem;min-height:100vh;max-width:1380px}
+  .works-title{font-family:var(--display);font-weight:400;color:#fff;
+    font-size:clamp(1.6rem,3.2vw,2.6rem);text-shadow:0 1px 26px rgba(120,20,20,.25);
+    margin-bottom:2.4rem}
+  .works-head{display:grid;grid-template-columns:1fr 1fr;align-items:end;
+    gap:3rem;margin-bottom:2.6rem}
+  .works-head h2{font-family:var(--display);font-weight:500;
+    font-size:clamp(1.3rem,2.2vw,1.9rem);letter-spacing:-.02em}
+  .works-head .meta{color:var(--ink-soft);font-size:.92rem;max-width:30ch}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.2rem}
+  .card{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+    background:#ddd;isolation:isolate;}
+  .card.a{grid-column:span 7;aspect-ratio:16/11}
+  .card.b{grid-column:span 5}
+  .card.c{grid-column:span 4;aspect-ratio:1/1}
+  .card.d{grid-column:span 4;aspect-ratio:1/1}
+  .card.e{grid-column:span 4;aspect-ratio:1/1}
+  .card.f{grid-column:span 6;aspect-ratio:16/10}
+  .card.g{grid-column:span 6;aspect-ratio:16/10}
+  .card .thumb{position:absolute;inset:0;transition:transform .9s var(--ease)}
+  .card:hover .thumb{transform:scale(1.05)}
+  .card .overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
+    justify-content:flex-end;padding:1.2rem 1.3rem;
+    background:linear-gradient(to top,rgba(20,20,30,.55),rgba(20,20,30,0) 55%);
+    opacity:0;transition:opacity .4s var(--ease);}
+  .card:hover .overlay{opacity:1}
+  .card .cat{color:rgba(255,255,255,.8);font-size:.74rem;letter-spacing:.08em;
+    text-transform:uppercase;margin-bottom:.25rem}
+  .card .title{color:#fff;font-family:var(--display);font-weight:500;font-size:1.2rem}
+  .card .yr{position:absolute;top:1rem;right:1.1rem;z-index:2;color:#fff;font-size:.82rem;
+    opacity:0;transform:translateY(-6px);transition:.4s var(--ease)}
+  .card:hover .yr{opacity:.85;transform:none}
+
+  /* ABOUT */
+  #about{min-height:100vh}
+  #about .sec-inner{min-height:100vh;display:flex;align-items:flex-start;padding:24vh 2rem 7rem}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;width:100%;align-items:center}
+  .about-title{font-family:var(--display);font-weight:400;color:#fff;
+    font-size:clamp(1.6rem,3.2vw,2.6rem);text-shadow:0 1px 26px rgba(120,20,20,.25)}
+  .about-text{font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:46ch}
+  @media(max-width:880px){.about-grid,.works-head{grid-template-columns:1fr;gap:1.4rem}}
+
+  /* ---------- PROJECT OVERLAY ---------- */
+  .project-overlay{position:fixed;inset:0;z-index:50;background:var(--bg);
+    overflow-x:hidden;overflow-y:auto;display:none}
+  .project-overlay.open{display:block;animation:viewIn .5s var(--ease) both}
+  @keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  #project .sec-inner{padding:5rem 2rem 6rem}
+  .back{display:inline-flex;align-items:center;gap:.5rem;color:var(--ink-soft);cursor:pointer;
+    font-size:.98rem;margin-bottom:2rem;transition:.25s}
+  .back:hover{color:var(--ink);gap:.8rem}
+  .proj-head{margin-bottom:2.2rem}
+  .proj-head .cat{color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;
+    font-size:.82rem;margin-bottom:.7rem}
+  .proj-head h1{font-family:var(--display);font-weight:500;
+    font-size:clamp(1.8rem,3.6vw,3rem);line-height:.98;letter-spacing:-.025em}
+  .proj-hero{width:100%;aspect-ratio:16/8;border-radius:16px;overflow:hidden;
+    margin-bottom:3rem;position:relative}
+  .proj-hero .thumb{position:absolute;inset:0}
+  .proj-body{display:grid;grid-template-columns:1fr 2fr;gap:3rem;margin-bottom:3.4rem}
+  .proj-meta{display:flex;flex-direction:column;gap:1.3rem;position:sticky;top:3rem;align-self:start}
+  .proj-meta .row .k{color:var(--ink-faint);font-size:.76rem;letter-spacing:.06em;
+    text-transform:uppercase;margin-bottom:.25rem}
+  .proj-meta .row .v{font-size:1rem;color:var(--ink)}
+  .proj-desc p{font-size:1.05rem;line-height:1.55;color:var(--ink);margin-bottom:1.2rem;max-width:58ch}
+  .proj-desc p.lead{font-family:var(--display);font-size:1.3rem;font-weight:400}
+  .proj-gallery{display:flex;flex-direction:column;gap:1.2rem;margin-bottom:4rem}
+  .proj-gallery .full{aspect-ratio:16/9;border-radius:14px;overflow:hidden;position:relative}
+  .proj-gallery .split{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+  .proj-gallery .split>div{aspect-ratio:4/5;border-radius:14px;overflow:hidden;position:relative}
+  .proj-gallery .thumb{position:absolute;inset:0}
+  .next{border-top:1px solid var(--line);padding-top:2.2rem;cursor:pointer;
+    display:flex;justify-content:space-between;align-items:baseline;transition:.3s}
+  .next:hover{padding-left:.6rem}
+  .next .lbl{color:var(--ink-faint);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+  .next .nm{font-family:var(--display);font-weight:500;font-size:clamp(1.4rem,2.8vw,2.2rem);letter-spacing:-.02em}
+
+  /* ---------- ALL WORKS PAGE ---------- */
+  #allworks{position:fixed;inset:0;z-index:48;background:var(--bg);
+    overflow-x:hidden;overflow-y:auto;display:none}
+  #allworks.open{display:block;animation:viewIn .5s var(--ease) both}
+  #allworks .sec-inner{padding:6rem 2rem 7rem;max-width:1380px}
+  .aw-head{display:flex;justify-content:space-between;align-items:flex-end;
+    gap:2rem;margin-bottom:2.8rem}
+  .aw-head h1{font-family:var(--display);font-weight:500;
+    font-size:clamp(2rem,4vw,3.2rem);line-height:.98;letter-spacing:-.025em}
+  .aw-head .meta{color:var(--ink-soft);font-size:.95rem;max-width:34ch;text-align:right}
+  .aw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.1rem}
+  .aw-grid .card{aspect-ratio:1/1;grid-column:auto}
+
+  @media(max-width:880px){
+    nav{gap:1.1rem;padding:1.1rem 1.4rem;font-size:.95rem;flex-wrap:wrap}
+    nav .links{gap:1.3rem}
+    .card.a,.card.b,.card.c,.card.d,.card.e,.card.f,.card.g{grid-column:span 12}
+    .proj-body{grid-template-columns:1fr;gap:1.8rem}
+    .proj-meta{position:static;flex-direction:row;flex-wrap:wrap;gap:1.4rem 2.2rem}
+    .proj-gallery .split{grid-template-columns:1fr}
+    #works .sec-inner,#about .sec-inner,#project .sec-inner,#allworks .sec-inner{padding-left:1.4rem;padding-right:1.4rem}
+    .aw-head{flex-direction:column;align-items:flex-start;gap:.8rem}
+    .aw-head .meta{text-align:left}
+    .aw-grid{grid-template-columns:repeat(2,1fr);gap:.8rem}
+  }
+</style>
+</head>
+<body data-section="home">
+
+  <!-- fixed chrome -->
+  <div class="chrome">
+    <nav>
+      <div class="links">
+        <a data-go="home" class="active">Home</a>
+        <a data-go="about">About</a>
+        <a id="navWorks">My works</a>
+        <a data-go="about">CV</a>
+        <a data-go="about">Contact</a>
+      </div>
+    </nav>
+    <div class="corner left">Aviv Cohen</div>
+    <div class="corner right">Graphic Designer</div>
+  </div>
+
+  <main>
+    <!-- HOME -->
+    <section class="section" id="home">
+      <div class="sec-bg"><div class="blob blue"></div></div>
+      <div class="skills">
+        <span class="skill s1">UI/UX</span>
+        <span class="skill s2">Branding</span>
+        <span class="skill s3">Vibe coding</span>
+        <span class="skill s4">Illustration</span>
+      </div>
+    </section>
+
+    <!-- WORKS -->
+    <section class="section" id="works">
+      <div class="sec-bg"><div class="blob blue"></div><div class="blob red"></div></div>
+      <div class="sec-inner">
+        <h2 class="works-title">Recent works</h2>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="sec-bg"><div class="blob red"></div><div class="blob blue"></div></div>
+      <div class="sec-inner">
+        <div class="about-grid">
+          <div class="about-title">About</div>
+          <p class="about-text">My name is Aviv, a third-year Visual Communication student at Bezalel Academy. With a lifelong foundation in art and illustration, I&rsquo;ve developed a keen eye for visual language &ndash; now channeling that creative background into Product Design to transform passion into functional, impactful digital experiences.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ALL WORKS PAGE -->
+  <div id="allworks">
+    <div class="sec-bg"><div class="blob blue"></div><div class="blob red"></div></div>
+    <div class="sec-inner">
+      <span class="back" id="awBack">&larr; Back</span>
+      <div class="aw-head">
+        <h1>My works</h1>
+        <div class="meta">A selection of projects across UI/UX, branding, type and illustration.</div>
+      </div>
+      <div class="aw-grid" id="awGrid"></div>
+    </div>
+  </div>
+
+  <!-- PROJECT OVERLAY -->
+  <div class="project-overlay" id="project">
+    <div class="sec-bg"><div class="blob violet"></div><div class="blob pink"></div></div>
+    <div class="sec-inner">
+      <span class="back" id="back">&larr; Back to works</span>
+      <div class="proj-head"><div class="cat" id="pCat"></div><h1 id="pTitle"></h1></div>
+      <div class="proj-hero"><div class="thumb" id="pHero"></div></div>
+      <div class="proj-body">
+        <div class="proj-meta" id="pMeta"></div>
+        <div class="proj-desc" id="pDesc"></div>
+      </div>
+      <div class="proj-gallery">
+        <div class="full"><div class="thumb" id="pg1"></div></div>
+        <div class="split">
+          <div><div class="thumb" id="pg2"></div></div>
+          <div><div class="thumb" id="pg3"></div></div>
+        </div>
+      </div>
+      <div class="next" id="next"><span class="lbl">Next project</span><span class="nm" id="pNext"></span></div>
+    </div>
+  </div>
+
+<script>
+function thumb(p){return `linear-gradient(${p.ang||135}deg, ${p.c1}, ${p.c2})`;}
+const PROJECTS = [
+  {id:0, cls:'a', title:'Halcyon', cat:'UI / UX', year:'2025', client:'Halcyon App',
+   role:'Product Design', tools:'Figma, Framer', c1:'#5b6cff', c2:'#9aa6ff', ang:130,
+   lead:'A calm banking interface that turns money management into something quiet and unintimidating.',
+   body:['I led the end-to-end product design \u2014 from information architecture to a soft, low-contrast visual language built around generous spacing and gentle motion.','The result is a system that feels less like a dashboard and more like a breathing space, with color used sparingly to guide attention rather than demand it.']},
+  {id:1, cls:'b', title:'Citrus', cat:'Type / Illustration', year:'2024', client:'Personal',
+   role:'Lettering, Illustration', tools:'Procreate, Illustrator', c1:'#ff8a3d', c2:'#ffd64d', ang:160,
+   lead:'A juicy display typeface and illustration set exploring warmth, fruit and summer light.',
+   body:['Each glyph was drawn by hand first, then digitised and refined into a cohesive type family.','The accompanying illustrations push the same energy into editorial spreads and packaging mockups.']},
+  {id:2, cls:'c', title:'Nocturne', cat:'Branding', year:'2025', client:'Nocturne Records',
+   role:'Brand Identity', tools:'Illustrator, InDesign', c1:'#1e2746', c2:'#3a4a7a', ang:135,
+   lead:'A nocturnal identity for an independent record label \u2014 quiet, confident, after-hours.',
+   body:['Built on a deep midnight palette and a single expressive wordmark that bends like sound on vinyl.','The system flexes across sleeves, posters and a minimal digital presence.']},
+  {id:3, cls:'d', title:'Bloom', cat:'UI / UX', year:'2024', client:'Bloom Studio',
+   role:'Web Design', tools:'Figma, Framer', c1:'#ff5da2', c2:'#ffb3d1', ang:140,
+   lead:'A playful studio site where soft gradients and overlap create a sense of depth.',
+   body:['The layout breaks the grid deliberately, letting type and imagery overlap to feel handmade.','Micro-interactions reward scrolling without ever getting in the way of the work.']},
+];
+
+const grid = document.getElementById('grid');
+PROJECTS.forEach((p)=>{
+  const card = document.createElement('div');
+  card.className = 'card '+p.cls;
+  card.innerHTML = `
+    <div class="thumb" style="background:${thumb(p)}"></div>
+    <span class="yr">${p.year}</span>
+    <div class="overlay"><div class="cat">${p.cat}</div><div class="title">${p.title}</div></div>`;
+  card.addEventListener('click',()=>openProject(p.id));
+  grid.appendChild(card);
+});
+
+const body = document.body;
+document.querySelectorAll('nav a[data-go]').forEach(a=>{
+  a.addEventListener('click',()=>{
+    const el = document.getElementById(a.dataset.go);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id = e.target.id;
+      body.dataset.section = id;
+      document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+      const link = document.querySelector(`nav a[data-go="${id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+},{rootMargin:'-45% 0px -45% 0px', threshold:0});
+['home','works','about'].forEach(id=>obs.observe(document.getElementById(id)));
+
+const overlay = document.getElementById('project');
+let activeList = PROJECTS;
+function openProject(id, list){
+  list = list || activeList;
+  activeList = list;
+  const p = list[id];
+  const nextId = (id+1)%list.length;
+  const next = list[nextId];
+  document.getElementById('pCat').textContent = p.cat;
+  document.getElementById('pTitle').textContent = p.title;
+  document.getElementById('pDesc').innerHTML = `<p class="lead">${p.lead}</p>` + p.body.map(t=>`<p>${t}</p>`).join('');
+  document.getElementById('pMeta').innerHTML = `
+    <div class="row"><div class="k">Client</div><div class="v">${p.client}</div></div>
+    <div class="row"><div class="k">Role</div><div class="v">${p.role}</div></div>
+    <div class="row"><div class="k">Year</div><div class="v">${p.year}</div></div>
+    <div class="row"><div class="k">Tools</div><div class="v">${p.tools}</div></div>`;
+  document.getElementById('pHero').style.background = thumb(p);
+  document.getElementById('pg1').style.background = `linear-gradient(${(p.ang+40)}deg, ${p.c2}, ${p.c1})`;
+  document.getElementById('pg2').style.background = `linear-gradient(${p.ang}deg, ${p.c1}, ${p.c2})`;
+  document.getElementById('pg3').style.background = `radial-gradient(circle at 40% 30%, ${p.c2}, ${p.c1})`;
+  document.getElementById('pNext').textContent = next.title;
+  document.getElementById('next').onclick = ()=>{overlay.scrollTo({top:0});openProject(nextId, list);};
+  overlay.classList.add('open');
+  overlay.scrollTo({top:0});
+  body.classList.add('project-open');
+  body.style.overflow='hidden';
+}
+document.getElementById('back').addEventListener('click',()=>{
+  overlay.classList.remove('open');
+  if(allworksOpen){ return; }   /* opened from the works page -> stay on it */
+  body.classList.remove('project-open');
+  body.style.overflow='';
+});
+
+/* ---------- MY WORKS PAGE (separate page, grid of 10) ---------- */
+const ALLWORKS = [
+  {title:'Halcyon', cat:'UI / UX', year:'2025', client:'Halcyon App', role:'Product Design', tools:'Figma, Framer', c1:'#5b6cff', c2:'#9aa6ff', ang:130,
+   lead:'A calm banking interface that turns money management into something quiet and unintimidating.',
+   body:['I led the end-to-end product design \u2014 from information architecture to a soft, low-contrast visual language built around generous spacing.','The result feels less like a dashboard and more like a breathing space.']},
+  {title:'Citrus', cat:'Type / Illustration', year:'2024', client:'Personal', role:'Lettering, Illustration', tools:'Procreate, Illustrator', c1:'#ff8a3d', c2:'#ffd64d', ang:160,
+   lead:'A juicy display typeface and illustration set exploring warmth, fruit and summer light.',
+   body:['Each glyph was drawn by hand first, then digitised into a cohesive type family.','The illustrations push the same energy into editorial spreads.']},
+  {title:'Nocturne', cat:'Branding', year:'2025', client:'Nocturne Records', role:'Brand Identity', tools:'Illustrator, InDesign', c1:'#1e2746', c2:'#3a4a7a', ang:135,
+   lead:'A nocturnal identity for an independent record label \u2014 quiet, confident, after-hours.',
+   body:['Built on a deep midnight palette and an expressive wordmark that bends like sound on vinyl.','The system flexes across sleeves, posters and a minimal digital presence.']},
+  {title:'Bloom', cat:'UI / UX', year:'2024', client:'Bloom Studio', role:'Web Design', tools:'Figma, Framer', c1:'#ff5da2', c2:'#ffb3d1', ang:140,
+   lead:'A playful studio site where soft gradients and overlap create a sense of depth.',
+   body:['The layout breaks the grid deliberately, letting type and imagery overlap to feel handmade.','Micro-interactions reward scrolling without getting in the way.']},
+  {title:'Tidal', cat:'Branding', year:'2025', client:'Tidal Co.', role:'Brand System', tools:'Illustrator', c1:'#1fb6c9', c2:'#7fe3d0', ang:150,
+   lead:'A fluid identity for a sustainable swimwear label inspired by moving water.',
+   body:['Wave-based logo construction paired with a flexible motion system.','Applied across packaging, web and social.']},
+  {title:'Ember', cat:'Illustration', year:'2024', client:'Editorial', role:'Illustration', tools:'Procreate', c1:'#ff6a3d', c2:'#ffb15e', ang:125,
+   lead:'A warm editorial illustration series on slow living and home rituals.',
+   body:['Textured, hand-drawn scenes with a muted-warm palette.','Published as a six-part column.']},
+  {title:'Verde', cat:'UI / UX', year:'2025', client:'Verde Health', role:'Product Design', tools:'Figma', c1:'#3bb273', c2:'#a8e6b0', ang:135,
+   lead:'A gentle wellness app that nudges habits without pressure.',
+   body:['Soft greens and generous whitespace keep the experience calm.','Designed an adaptive daily check-in flow.']},
+  {title:'Monolith', cat:'Type', year:'2023', client:'Personal', role:'Type Design', tools:'Glyphs', c1:'#2c2c30', c2:'#6a6a72', ang:120,
+   lead:'A high-contrast grotesk built for bold editorial headlines.',
+   body:['Five weights drawn for impact at large display sizes.','Tested across print and screen.']},
+  {title:'Aurora', cat:'Branding', year:'2024', client:'Aurora Festival', role:'Identity & Posters', tools:'Illustrator', c1:'#7b5bff', c2:'#ff7be0', ang:145,
+   lead:'A vivid identity for a night-time arts festival full of light and motion.',
+   body:['A gradient-driven visual language echoing the night sky.','A poster system that mixes and recombines.']},
+  {title:'Harvest', cat:'Illustration', year:'2023', client:'Packaging', role:'Illustration', tools:'Illustrator', c1:'#e0a83d', c2:'#f6d98a', ang:155,
+   lead:'Hand-built illustrations for a small-batch pantry brand.',
+   body:['Folk-inspired motifs across jars and labels.','A warm, earthy palette ties the range together.']},
+];
+
+const awGrid = document.getElementById('awGrid');
+ALLWORKS.forEach((p,i)=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="thumb" style="background:${thumb(p)}"></div>
+    <span class="yr">${p.year}</span>
+    <div class="overlay"><div class="cat">${p.cat}</div><div class="title">${p.title}</div></div>`;
+  card.addEventListener('click',()=>openProject(i, ALLWORKS));
+  awGrid.appendChild(card);
+});
+
+const allworks = document.getElementById('allworks');
+let allworksOpen = false;
+function openAllworks(){
+  allworks.classList.add('open');
+  allworks.scrollTo({top:0});
+  allworksOpen = true;
+  body.classList.add('project-open');
+  body.style.overflow='hidden';
+}
+function closeAllworks(){
+  allworks.classList.remove('open');
+  allworksOpen = false;
+  body.classList.remove('project-open');
+  body.style.overflow='';
+}
+document.getElementById('navWorks').addEventListener('click', openAllworks);
+document.getElementById('awBack').addEventListener('click', closeAllworks);
+</script>
+</body>
+</html>
