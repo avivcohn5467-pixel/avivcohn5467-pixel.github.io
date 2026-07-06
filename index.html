@@ -390,8 +390,8 @@ function openProject(id, list){
 }
 document.getElementById('back').addEventListener('click',()=>{
   overlay.classList.remove('open');
-  if(allworksOpen){ return; }   /* opened from the works page -> stay on it */
   body.classList.remove('project-open');
+  if(allworksOpen){ return; }   /* opened from the works page -> stay on it */
   body.style.overflow='';
 });
 
@@ -447,13 +447,11 @@ function openAllworks(){
   allworks.classList.add('open');
   allworks.scrollTo({top:0});
   allworksOpen = true;
-  body.classList.add('project-open');
   body.style.overflow='hidden';
 }
 function closeAllworks(){
   allworks.classList.remove('open');
   allworksOpen = false;
-  body.classList.remove('project-open');
   body.style.overflow='';
 }
 document.getElementById('navWorks').addEventListener('click', openAllworks);
