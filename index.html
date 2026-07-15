@@ -187,7 +187,7 @@
   @keyframes breatheContact{0%,100%{transform:translate(-50%,-50%) scale(1)}
     50%{transform:translate(-50%,-50%) scale(1.28)}}
   #contact .sec-inner{min-height:70vh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:4rem 2rem 10rem}
+    align-items:center;justify-content:center;text-align:center;padding:1rem 2rem 14rem}
   .contact-title{font-family:var(--display);font-weight:400;color:var(--ink);
     font-size:clamp(1.8rem,3.6vw,2.8rem);letter-spacing:-.02em;margin-bottom:.9rem}
   .contact-sub{color:var(--ink-soft);font-size:1.02rem;max-width:40ch;margin-bottom:2.6rem}
@@ -211,7 +211,7 @@
   .back:hover{color:var(--ink);gap:.8rem}
   .proj-head{margin-bottom:1.6rem}
   .proj-head .cat{color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;
-    font-size:.82rem;margin-bottom:.7rem}
+    font-size:.82rem;margin-top:.6rem}
   .proj-head h1{font-family:var(--display);font-weight:500;
     font-size:clamp(1.3rem,2.2vw,1.9rem);line-height:.98;letter-spacing:-.025em}
 
@@ -228,7 +228,7 @@
   .proj-right::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
   .proj-img{width:100%;border-radius:14px;position:relative;overflow:hidden;flex:none}
   .proj-img.grad{min-height:280px;background-size:cover;background-position:center}
-  .proj-img img,.proj-img video{display:block;width:100%;max-height:72vh;height:auto;
+  .proj-img img,.proj-img video{display:block;width:100%;height:auto;
     object-fit:contain;border-radius:14px}
   .next{border-top:1px solid var(--line);padding-top:1.6rem;cursor:pointer;
     display:flex;flex-direction:column;gap:.3rem;transition:.3s;margin-top:auto;flex:none}
@@ -372,7 +372,7 @@
       <span class="back" id="back">&larr; Back to works</span>
       <div class="proj-layout">
         <div class="proj-left">
-          <div class="proj-head"><div class="cat" id="pCat"></div><h1 id="pTitle"></h1></div>
+          <div class="proj-head"><h1 id="pTitle"></h1><div class="cat" id="pCat"></div></div>
           <div class="proj-desc" id="pDesc"></div>
           <div class="next" id="next"><span class="lbl">Next project</span><span class="nm" id="pNext"></span></div>
         </div>
@@ -404,13 +404,13 @@ const PROJECTS = [
    role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
    lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
    body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
-  {id:2, cls:'c', title:'Milon Hai', cat:'Branding / Merch', year:'2025', client:'Milon Hai',
-   role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', img1:'milon-hai.jpg',
-   lead:'A loud, joyful pattern language for a brand celebrating Israeli street food and slang.',
-   body:['An all-over icon system \u2014 falafel, roosters, flip-flops, plastic chairs \u2014 paired with punchy Hebrew type.','Applied first to a bucket hat, with the pattern built to flex across future merch and packaging.']},
+  {id:2, cls:'c', title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai',
+   role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', heroVideoCompact:true, img1:'milon-hai.jpg',
+   lead:'Milon Hai\u2019 is a concept app developed around a gap we identified among new immigrants in Israel: the lack of tools that teach the actual cultural context of local slang.',
+   body:['The result is an app that serves as a social and experiential platform, allowing users to \u2018collect\u2019 the Israeli street \u2014 from coffee shop slang to workplace expressions.','It goes beyond literal translations (\u2018what does it mean?\u2019), providing the full cultural context: tone, humor, and the situations in which each word is appropriately used.']},
   {id:3, cls:'d', title:'Maskit.code', cat:'Branding / E-commerce', year:'2024', client:'Maskit.code',
    role:'Brand Identity, Web Design', tools:'Figma, Illustrator', c1:'#2c2c30', c2:'#8a8a90', ang:140,
-   img:'maskit-screenshot.jpg',
+   img:'maskit-cotton.jpg', heroVideo:'maskit-farm.mp4',
    lead:'A digital archive reimagining Israel’s legendary Maskit fashion house as a living, browsable collection.',
    body:['Each historic garment is presented like a museum plate — reference number, origin, medium and pattern — paired with a rendered lookbook shot.','The system carries the label’s heritage craft into a clean, catalogue-like digital format.']},
 ];
@@ -487,7 +487,8 @@ function openProject(id, list){
   if(p.heroVideo){
     heroEl.classList.remove('grad');
     heroEl.style.background = 'none';
-    heroEl.innerHTML = `<video src="${p.heroVideo}" poster="${p.img||''}" autoplay muted loop playsinline></video>`;
+    const heroVideoStyle = p.heroVideoCompact ? ' style="max-height:72vh;width:auto;margin:0 auto"' : '';
+    heroEl.innerHTML = `<video src="${p.heroVideo}" poster="${p.img||''}" autoplay muted loop playsinline${heroVideoStyle}></video>`;
   } else if(p.video){
     heroEl.classList.remove('grad');
     heroEl.style.background = 'none';
@@ -527,16 +528,16 @@ const ALLWORKS = [
   {title:'Prism', cat:'UI / UX', year:'2024', client:'Prism', role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
    lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
    body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
-  {title:'Milon Hai', cat:'Branding / Merch', year:'2025', client:'Milon Hai', role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', img1:'milon-hai.jpg',
-   lead:'A loud, joyful pattern language for a brand celebrating Israeli street food and slang.',
-   body:['An all-over icon system \u2014 falafel, roosters, flip-flops, plastic chairs \u2014 paired with punchy Hebrew type.','Applied first to a bucket hat, with the pattern built to flex across future merch and packaging.']},
+  {title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai', role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', heroVideoCompact:true, img1:'milon-hai.jpg',
+   lead:'Milon Hai\u2019 is a concept app developed around a gap we identified among new immigrants in Israel: the lack of tools that teach the actual cultural context of local slang.',
+   body:['The result is an app that serves as a social and experiential platform, allowing users to \u2018collect\u2019 the Israeli street \u2014 from coffee shop slang to workplace expressions.','It goes beyond literal translations (\u2018what does it mean?\u2019), providing the full cultural context: tone, humor, and the situations in which each word is appropriately used.']},
   {title:'Maskit.code', cat:'Branding / E-commerce', year:'2024', client:'Maskit.code', role:'Brand Identity, Web Design', tools:'Figma, Illustrator', c1:'#2c2c30', c2:'#8a8a90', ang:140,
-   img:'maskit-screenshot.jpg',
+   img:'maskit-cotton.jpg', heroVideo:'maskit-farm.mp4',
    lead:'A digital archive reimagining Israel’s legendary Maskit fashion house as a living, browsable collection.',
    body:['Each historic garment is presented like a museum plate — reference number, origin, medium and pattern — paired with a rendered lookbook shot.','The system carries the label’s heritage craft into a clean, catalogue-like digital format.']},
-  {title:'GRUNGE', cat:'Editorial / Zine', year:'2025', client:'Grunge Zine', role:'Editorial Design, Art Direction', tools:'InDesign, Illustrator', c1:'#e8452e', c2:'#f2c14e', ang:150, img:'grunge.jpg',
-   lead:'A neon, punk-inspired zine series built around the line “Grunge, lo met” — grunge isn’t dead.',
-   body:['A bold, cropped wordmark letter anchors each issue, printed on a rotating set of loud fluorescent covers.','The stripped-down, photocopy-zine energy carries through typography, layout and the choice of paper stock.']},
+  {title:'VOUCH', cat:'UI/UX · App Design · Digital Product', year:'2026', client:'Vouch', role:'Product Design', tools:'Figma', c1:'#e8a68c', c2:'#f2d9c9', ang:150, img:'vouch.jpg',
+   lead:'Vouch is a UX/UI design concept for a social habit-building app, developed during an intensive one-week design sprint at UX studio at Bezalel to explore how shared accountability can overcome the limitations of individual discipline.',
+   body:['By linking the progress of two partners through a “shared streak” mechanism, the app transforms habit-tracking into a social commitment, featuring a unique “Forgiveness Loop” for missed days and a peer-rating system to foster reliability.','Through user research, rapid wireframing, and a vibrant, emotional interface, Vouch merges psychological insights with intuitive interaction design, turning mundane daily routines into a meaningful and supportive social ritual.']},
   {title:'rootea', cat:'Branding / Packaging', year:'2024', client:'rootea', role:'Brand Identity, Packaging', tools:'Illustrator, Photography', c1:'#4a4a52', c2:'#8a8a92', ang:125, img:'rootea.jpg',
    lead:'A quiet, herbal identity for a loose-leaf tea brand built around simplicity and ritual.',
    body:['A minimal wordmark and matte charcoal tags let the tea itself — dried petals, herbs, stems — take center stage.','The system stays understated across pyramid bags, labels and future packaging.']},
@@ -549,6 +550,9 @@ const ALLWORKS = [
   {title:'Double Life', cat:'Editorial / Illustration', year:'2024', client:'Personal', role:'Illustration, Editorial Design', tools:'Procreate, InDesign', c1:'#2f6b3a', c2:'#c23b1f', ang:145, img:'double-life.jpg',
    lead:'An accordion-fold visual essay tracing a shift from green, familiar spaces into a warmer, stranger unknown.',
    body:['A continuous painted strip moves scene by scene from a childhood garden into saturated red-orange rooms, paired with short Hebrew reflections.','The fold format lets the piece be read as one long journey or unfolded flat as a single image.']},
+  {title:'GRUNGE', cat:'Editorial / Zine', year:'2025', client:'Grunge Zine', role:'Editorial Design, Art Direction', tools:'InDesign, Illustrator', c1:'#e8452e', c2:'#f2c14e', ang:150, img:'grunge.jpg',
+   lead:'A neon, punk-inspired zine series built around the line “Grunge, lo met” — grunge isn’t dead.',
+   body:['A bold, cropped wordmark letter anchors each issue, printed on a rotating set of loud fluorescent covers.','The stripped-down, photocopy-zine energy carries through typography, layout and the choice of paper stock.']},
   {title:'Harvest', cat:'Illustration', year:'2023', client:'Packaging', role:'Illustration', tools:'Illustrator', c1:'#e0a83d', c2:'#f6d98a', ang:155,
    lead:'Hand-built illustrations for a small-batch pantry brand.',
    body:['Folk-inspired motifs across jars and labels.','A warm, earthy palette ties the range together.']},
