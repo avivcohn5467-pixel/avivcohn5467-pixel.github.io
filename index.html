@@ -230,6 +230,17 @@
   .proj-img.grad{min-height:280px;background-size:cover;background-position:center}
   .proj-img img,.proj-img video{display:block;width:100%;height:auto;
     object-fit:contain;border-radius:14px}
+
+  /* cute horizontal-scroll strip of illustrations */
+  .proj-strip{display:flex;gap:1.1rem;overflow-x:auto;padding:.6rem .2rem 1.6rem;
+    flex:none;scroll-snap-type:x proximity;scrollbar-width:thin;
+    scrollbar-color:var(--ink-faint) transparent}
+  .proj-strip::-webkit-scrollbar{height:6px}
+  .proj-strip::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
+  .proj-strip img{flex:none;width:150px;height:150px;object-fit:contain;
+    border-radius:18px;padding:.9rem;scroll-snap-align:start;
+    transition:transform .3s var(--ease)}
+  .proj-strip img:hover{transform:translateY(-4px) rotate(-2deg)}
   .next{border-top:1px solid var(--line);padding-top:1.6rem;cursor:pointer;
     display:flex;flex-direction:column;gap:.3rem;transition:.3s;margin-top:auto;flex:none}
   .next:hover{padding-left:.6rem}
@@ -381,6 +392,7 @@
           <div class="proj-img" id="pg1"></div>
           <div class="proj-img" id="pg2"></div>
           <div class="proj-img" id="pg3"></div>
+          <div class="proj-strip" id="pStrip"></div>
         </div>
       </div>
     </div>
@@ -397,11 +409,13 @@ function cardMedia(p){
 }
 const PROJECTS = [
   {id:0, cls:'a', title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO',
-   role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg',
+   role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg', img1:'kodo-flow.mp4', img1Compact:true,
+   strip:['kodo-icon-led.png','kodo-icon-network.png','kodo-icon-screen.png','kodo-icon-button.png','kodo-icon-pi1.png','kodo-icon-pi2.png','kodo-icon-wires.png'],
    lead:'Meet KODO! Where Montessori principles meet the vibecoding and cyber decks of today. Instead of raising more iPad kids, we believe the next generation will be one of creators and visionaries: with the right tools, of course.',
    body:['With KODO, kids set up their own cyber decks and build their own games to play on them, returning a sense of agency and ownership over tech that we haven\u2019t had since the days of retro arcades.','Our vision is for classrooms to be full of students swapping decks and comparing games so screens don\u2019t keep isolating us, but rather bring back creativity and community.']},
   {id:1, cls:'b', title:'Prism', cat:'UI / UX', year:'2024', client:'Prism',
    role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
+   img1:'prism-flow.mp4', img2:'prism-promo.mp4',
    lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
    body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
   {id:2, cls:'c', title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai',
@@ -455,14 +469,15 @@ const obs = new IntersectionObserver((entries)=>{
 },{rootMargin:'-45% 0px -45% 0px', threshold:0});
 ['home','works','about','contact'].forEach(id=>obs.observe(document.getElementById(id)));
 
-function setProjImg(el, src, gradient, alt){
+function setProjImg(el, src, gradient, alt, compact){
   if(src){
     el.classList.remove('grad');
     el.style.background = 'none';
+    const compactStyle = compact ? ' style="max-height:72vh;width:auto;margin:0 auto"' : '';
     if(/\.(mp4|mov|webm)$/i.test(src)){
-      el.innerHTML = `<video src="${src}" autoplay muted loop playsinline></video>`;
+      el.innerHTML = `<video src="${src}" autoplay muted loop playsinline${compactStyle}></video>`;
     } else {
-      el.innerHTML = `<img src="${src}" alt="${alt}">`;
+      el.innerHTML = `<img src="${src}" alt="${alt}"${compactStyle}>`;
     }
   } else {
     el.classList.add('grad');
@@ -500,9 +515,12 @@ function openProject(id, list){
   } else {
     setProjImg(heroEl, p.img, thumb(p), p.title);
   }
-  setProjImg(document.getElementById('pg1'), p.img1, `linear-gradient(${(p.ang+40)}deg, ${p.c2}, ${p.c1})`, p.title);
+  setProjImg(document.getElementById('pg1'), p.img1, `linear-gradient(${(p.ang+40)}deg, ${p.c2}, ${p.c1})`, p.title, p.img1Compact);
   setProjImg(document.getElementById('pg2'), p.img2, `linear-gradient(${p.ang}deg, ${p.c1}, ${p.c2})`, p.title);
   setProjImg(document.getElementById('pg3'), p.img3, `radial-gradient(circle at 40% 30%, ${p.c2}, ${p.c1})`, p.title);
+  const stripEl = document.getElementById('pStrip');
+  stripEl.style.display = p.strip ? 'flex' : 'none';
+  stripEl.innerHTML = p.strip ? p.strip.map(src=>`<img src="${src}" alt="${p.title}">`).join('') : '';
   document.getElementById('pNext').textContent = next.title;
   document.getElementById('next').onclick = ()=>{openProject(nextId, list);};
   overlay.classList.add('open');
@@ -522,10 +540,12 @@ document.getElementById('back').addEventListener('click',()=>{
 
 /* ---------- MY WORKS PAGE (separate page, grid of 10) ---------- */
 const ALLWORKS = [
-  {title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO', role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg',
+  {title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO', role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg', img1:'kodo-flow.mp4', img1Compact:true,
+   strip:['kodo-icon-led.png','kodo-icon-network.png','kodo-icon-screen.png','kodo-icon-button.png','kodo-icon-pi1.png','kodo-icon-pi2.png','kodo-icon-wires.png'],
    lead:'Meet KODO! Where Montessori principles meet the vibecoding and cyber decks of today. Instead of raising more iPad kids, we believe the next generation will be one of creators and visionaries: with the right tools, of course.',
    body:['With KODO, kids set up their own cyber decks and build their own games to play on them, returning a sense of agency and ownership over tech that we haven\u2019t had since the days of retro arcades.','Our vision is for classrooms to be full of students swapping decks and comparing games so screens don\u2019t keep isolating us, but rather bring back creativity and community.']},
   {title:'Prism', cat:'UI / UX', year:'2024', client:'Prism', role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
+   img1:'prism-flow.mp4', img2:'prism-promo.mp4',
    lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
    body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
   {title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai', role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', heroVideoCompact:true, img1:'milon-hai.jpg',
