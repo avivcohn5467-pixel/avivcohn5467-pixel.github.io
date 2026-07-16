@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Aviv Cohen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Familjen+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1efed;
+    --ink:#2c2c30;
+    --ink-soft:#5a5a60;
+    --ink-faint:#9a9a9f;
+    --line:rgba(40,40,45,.12);
+    --blob-a:#4b54e8;
+    --blob-b:#ff4d4d;
+    --display:'Hanken Grotesk', sans-serif;
+    --body:'Familjen Grotesk', sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --maxw:1380px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);background:var(--bg);color:var(--ink);
+    min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  }
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;gap:2.1rem;padding:1.4rem 2rem;
+    font-size:1.02rem;letter-spacing:.01em;}
+  nav .links{display:flex;gap:2.1rem}
+  nav a{color:var(--ink);text-decoration:none;position:relative;cursor:pointer;transition:opacity .25s;}
+  nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:1.5px;width:0;
+    background:var(--ink);transition:width .3s var(--ease);}
+  nav a:hover::after, nav a.active::after{width:100%}
+  nav a:not(.active):hover{opacity:.6}
+
+  .sec-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
+  .blob.red{width:38vw;height:38vw;left:-6%;top:-2%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
+    opacity:.8;animation:driftB 28s ease-in-out infinite;}
+  .blob.blue{width:36vw;height:28vh;left:34%;top:-12%;
+    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 64%);
+    opacity:.6;animation:driftA 32s ease-in-out infinite;}
+  @keyframes driftA{0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(-3%,2.5%) scale(1.18)}66%{transform:translate(2.5%,-2%) scale(.85)}}
+  @keyframes driftB{0%,100%{transform:translate(0,0) scale(1)}
+    50%{transform:translate(3.5%,-3%) scale(1.22)}}
+
+  main{position:relative;z-index:10}
+  .section{position:relative;min-height:100vh}
+  .sec-inner{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;
+    min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 5rem}
+
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;width:100%;align-items:center}
+  .about-title{font-family:var(--display);font-weight:400;color:var(--ink);
+    font-size:clamp(1.8rem,3.6vw,2.8rem);letter-spacing:-.02em;margin-bottom:1.4rem}
+  .about-text{font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:46ch}
+  .about-text-wrap{display:flex;align-items:flex-start;gap:1.6rem}
+  .about-photo{width:104px;height:130px;object-fit:cover;border-radius:12px;flex:none;
+    box-shadow:0 10px 26px rgba(40,40,45,.16);transform:rotate(-3deg);
+    transition:transform .4s var(--ease)}
+  .about-photo:hover{transform:rotate(0deg) scale(1.03)}
+
+  @media(max-width:880px){
+    .about-grid{grid-template-columns:1fr;gap:1.4rem}
+    .about-text-wrap{gap:1.1rem}
+    .about-photo{width:78px;height:98px}
+    .sec-inner{padding-left:1.4rem;padding-right:1.4rem}
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="index.html#works">Works</a>
+      <a class="active">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" id="about">
+      <div class="sec-bg"><div class="blob red"></div><div class="blob blue"></div></div>
+      <div class="sec-inner">
+        <div class="about-grid">
+          <div>
+            <div class="about-title">About</div>
+          </div>
+          <div class="about-text-wrap">
+            <img class="about-photo" src="aviv-photo.jpg" alt="Aviv Cohen">
+            <p class="about-text">My name is Aviv, a third-year Visual Communication student at Bezalel Academy. With a lifelong foundation in art and illustration, I&rsquo;ve developed a keen eye for visual language &ndash; now channeling that creative background into Product Design to transform passion into functional, impactful digital experiences.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

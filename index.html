@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Familjen+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  @font-face{
+    font-family:'Coffee Tea Demo';
+    src:url('coffee-tea-demo.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
   :root{
     --bg:#f1efed;
     --ink:#2c2c30;
@@ -34,9 +41,28 @@
   #project .sec-bg{position:fixed;overflow:hidden}
   .blob{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
 
-  #home .blob.blue{width:42vw;height:54vh;left:29%;top:24%;
-    background:radial-gradient(circle at 50% 45%, var(--blob-a) 0%, rgba(75,84,232,0) 66%);
-    opacity:.9;animation:driftA 26s ease-in-out infinite;}
+  .mesh-gradient{position:fixed;inset:-20%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(at 15% 20%, #eef0ff 0px, transparent 55%),
+      radial-gradient(at 85% 10%, #e6e8fc 0px, transparent 50%),
+      radial-gradient(at 80% 85%, #c7cbf7 0px, transparent 55%),
+      radial-gradient(at 10% 80%, #dadcfa 0px, transparent 55%),
+      radial-gradient(at 50% 50%, #f4f2ee 0px, transparent 60%);
+    background-size:220% 220%;
+    background-repeat:no-repeat;
+    filter:blur(70px) saturate(1.05);
+    opacity:.6;
+    animation:meshMove 9s ease-in-out infinite;
+    will-change:background-position;}
+  @keyframes meshMove{
+    0%{background-position:0% 0%, 100% 0%, 100% 100%, 0% 100%, 50% 50%}
+    20%{background-position:60% 40%, 30% 70%, 40% 20%, 70% 30%, 30% 70%}
+    40%{background-position:100% 70%, 0% 30%, 10% 90%, 90% 10%, 70% 20%}
+    60%{background-position:20% 100%, 80% 60%, 70% 0%, 20% 80%, 10% 60%}
+    80%{background-position:80% 20%, 40% 90%, 90% 50%, 10% 40%, 60% 90%}
+    100%{background-position:0% 0%, 100% 0%, 100% 100%, 0% 100%, 50% 50%}
+  }
+
   #home .blob.pink{width:34vw;height:34vw;left:-12%;bottom:8%;
     background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 62%);
     opacity:.55;animation:driftB 30s ease-in-out infinite;}
@@ -51,13 +77,6 @@
     background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 62%);
     opacity:.45;animation:driftB 34s ease-in-out infinite;}
 
-  #about .blob.red{width:38vw;height:38vw;left:-6%;top:-2%;
-    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
-    opacity:.8;animation:driftB 28s ease-in-out infinite;}
-  #about .blob.blue{width:36vw;height:28vh;left:34%;top:-12%;
-    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 64%);
-    opacity:.6;animation:driftA 32s ease-in-out infinite;}
-
   #project .blob.violet{width:36vw;height:36vw;right:-10%;top:5%;
     background:radial-gradient(circle at 50% 50%, var(--blob-c) 0%, rgba(138,123,255,0) 62%);
     opacity:.38;animation:driftA 32s ease-in-out infinite;}
@@ -66,13 +85,6 @@
     opacity:.4;animation:driftTitle 7s ease-in-out infinite;}
   @keyframes driftTitle{0%,100%{transform:translateX(0) scale(1)}
     50%{transform:translateX(-4%) scale(1.32)}}
-
-  #allworks .blob.red{width:34vw;height:34vw;left:-8%;top:-10%;
-    background:radial-gradient(circle at 50% 50%, var(--blob-b) 0%, rgba(255,77,77,0) 60%);
-    opacity:.5;animation:driftB 28s ease-in-out infinite;}
-  #allworks .blob.blue{width:30vw;height:30vw;right:-8%;bottom:-6%;
-    background:radial-gradient(circle at 50% 50%, var(--blob-a) 0%, rgba(75,84,232,0) 62%);
-    opacity:.4;animation:driftA 32s ease-in-out infinite;}
 
   @keyframes driftA{0%,100%{transform:translate(0,0) scale(1)}
     33%{transform:translate(-3%,2.5%) scale(1.18)}66%{transform:translate(2.5%,-2%) scale(.85)}}
@@ -83,23 +95,27 @@
   .chrome{transition:opacity .4s var(--ease)}
   body.project-open .chrome{opacity:0;pointer-events:none}
 
-  nav{position:fixed;top:0;left:0;right:0;z-index:55;
-    display:flex;align-items:center;gap:2.1rem;padding:1.4rem 2rem;
+  nav{position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;gap:2.1rem;padding:1.4rem 2rem;
     font-size:1.02rem;letter-spacing:.01em;}
   nav .links{display:flex;gap:2.1rem}
-  nav a{color:var(--ink);text-decoration:none;position:relative;cursor:pointer;transition:opacity .25s;}
+  nav a{color:var(--blob-a);text-decoration:none;position:relative;cursor:pointer;transition:opacity .25s;}
   nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:1.5px;width:0;
-    background:var(--ink);transition:width .3s var(--ease);}
+    background:var(--blob-a);transition:width .3s var(--ease);}
   nav a:hover::after, nav a.active::after{width:100%}
   nav a:not(.active):hover{opacity:.6}
 
-  .corner{position:fixed;bottom:0;z-index:20;font-family:var(--display);font-weight:400;
-    font-size:clamp(1.7rem,4vw,3.1rem);line-height:.9;color:var(--ink);
-    letter-spacing:-.01em;padding:0 1.6rem 1.1rem;pointer-events:none;
-    transition:opacity .5s var(--ease);}
-  .corner.left{left:0}
-  .corner.right{right:0;color:var(--ink-soft)}
-  body[data-section="works"] .corner{opacity:0}
+
+  body[data-theme="dark"]{
+    --bg:#19191c;
+    --ink:#f1efed;
+    --ink-soft:#b6b6bc;
+    --ink-faint:#7c7c82;
+    --line:rgba(255,255,255,.14);
+  }
+  body[data-theme="dark"] .card{background:#2a2a2e}
+  body[data-theme="dark"] .chrome{transition:opacity .4s var(--ease), color .4s var(--ease)}
+
 
   /* ---------- SECTIONS (one continuous scroll) ---------- */
   main{position:relative;z-index:10;overflow:clip}
@@ -107,77 +123,34 @@
   .sec-inner{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
 
   /* HOME */
-  #home{display:flex;align-items:center;justify-content:center;min-height:100vh}
-  .skills{position:relative;z-index:1;width:min(460px,74vw);height:min(460px,60vh);transform:translateY(3vh)}
-  .skill{position:absolute;color:#fff;font-family:var(--display);font-weight:400;
-    font-size:clamp(1.05rem,1.8vw,1.6rem);letter-spacing:.01em;cursor:default;
-    transition:.35s var(--ease);text-shadow:0 1px 26px rgba(40,40,90,.25);
-    animation:float 7s ease-in-out infinite;}
-  .skill:hover{transform:scale(1.08);letter-spacing:.06em}
-  .skill.s1{top:10%;left:18%}
-  .skill.s2{top:38%;right:2%;animation-delay:1.4s}
-  .skill.s3{top:58%;left:6%;animation-delay:.7s}
-  .skill.s4{top:84%;left:42%;animation-delay:2.1s;color:rgba(255,255,255,.85)}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  .scroll-hint{position:absolute;bottom:2.6rem;left:50%;translate:-50% 0;z-index:2;
-    cursor:pointer;color:var(--ink-soft);opacity:.7;transition:opacity .25s;
-    animation:hintBounce 2.2s ease-in-out infinite}
-  .scroll-hint:hover{opacity:1}
-  .scroll-hint svg{width:20px;height:20px;display:block}
-  @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+  #home{display:flex;align-items:center;justify-content:center;min-height:77vh}
+  .hero-content{position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);
+    z-index:0;text-align:center;pointer-events:none;width:min(680px,92vw)}
+  .hero-title{font-family:'Coffee Tea Demo', var(--display);font-weight:400;color:var(--blob-a);
+    font-size:clamp(2.2rem,6.4vw,5.8rem);white-space:nowrap;letter-spacing:-.01em}
+  .hero-sub{margin-top:1.2rem;font-size:.92rem;line-height:1.55;color:var(--blob-a);
+    max-width:56ch;margin-left:auto;margin-right:auto;opacity:.75}
 
   /* WORKS */
-  #works .sec-inner{padding:5rem 2rem 7rem;min-height:100vh}
-  .works-title{font-family:var(--display);font-weight:400;color:#fff;
-    font-size:clamp(1.6rem,3.2vw,2.6rem);text-shadow:0 1px 26px rgba(120,20,20,.25);
-    margin-bottom:2.4rem}
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.2rem}
-  .view-all-card{display:flex;align-items:center;justify-content:center;
-    background:transparent;border:1px dashed var(--line);color:var(--ink-soft);
-    font-size:1rem;gap:.6rem;transition:.3s var(--ease)}
-  .view-all-card:hover{border-color:var(--ink);color:var(--ink);background:rgba(40,40,45,.04);gap:.9rem}
-  .view-all-card .arrow{transition:transform .3s var(--ease)}
-  .view-all-card:hover .arrow{transform:translateX(4px)}
-  .card{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+  #works .sec-inner{padding:9.8rem 1.5vw 7rem;min-height:100vh;max-width:none;width:auto;margin:0}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .card{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;
     background:#ddd;isolation:isolate;}
-  .card.a{grid-column:span 7;aspect-ratio:16/11}
-  .card.b{grid-column:span 5}
-  .card.c{grid-column:span 4;aspect-ratio:1/1}
-  .card.d{grid-column:span 4;aspect-ratio:1/1}
-  .card.e{grid-column:span 4;aspect-ratio:1/1}
-  .card.f{grid-column:span 6;aspect-ratio:16/10}
-  .card.g{grid-column:span 6;aspect-ratio:16/10}
+  .card.wide{grid-column:1/-1;aspect-ratio:2/1}
+  .card.sq{aspect-ratio:1/1}
   .card .thumb{position:absolute;inset:0;transition:transform .9s var(--ease)}
   video.card-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     transition:transform .9s var(--ease)}
-  .card:hover video.card-thumb{transform:scale(1.05)}
-  .card:hover .thumb{transform:scale(1.05)}
-  .card .overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
-    justify-content:flex-end;padding:1.2rem 1.3rem;
-    background:linear-gradient(to top,rgba(20,20,30,.55),rgba(20,20,30,0) 55%);
-    opacity:0;transition:opacity .4s var(--ease);}
-  .card:hover .overlay{opacity:1}
-  .card .cat{color:rgba(255,255,255,.8);font-size:.74rem;letter-spacing:.08em;
-    text-transform:uppercase;margin-bottom:.25rem}
-  .card .title{color:#fff;font-family:var(--display);font-weight:500;font-size:1.2rem}
-  .card .yr{position:absolute;top:1rem;right:1.1rem;z-index:2;color:#fff;font-size:.82rem;
-    opacity:0;transform:translateY(-6px);transition:.4s var(--ease)}
-  .card:hover .yr{opacity:.85;transform:none}
-
-  /* ABOUT */
-  #about{min-height:100vh}
-  #about .sec-inner{min-height:100vh;display:flex;align-items:flex-start;padding:24vh 2rem 7rem}
-  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;width:100%;align-items:center}
-  .about-title{font-family:var(--display);font-weight:400;color:#fff;
-    font-size:clamp(1.6rem,3.2vw,2.6rem);text-shadow:0 1px 26px rgba(120,20,20,.25)}
-  .about-text{font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:46ch}
-  .about-text-wrap{display:flex;align-items:flex-start;gap:1.6rem}
-  .about-photo{width:104px;height:130px;object-fit:cover;border-radius:12px;flex:none;
-    box-shadow:0 10px 26px rgba(40,40,45,.16);transform:rotate(-3deg);
-    transition:transform .4s var(--ease)}
-  .about-photo:hover{transform:rotate(0deg) scale(1.03)}
-  @media(max-width:880px){.about-grid,.works-head{grid-template-columns:1fr;gap:1.4rem}
-    .about-text-wrap{gap:1.1rem}.about-photo{width:78px;height:98px}}
+  .card:hover video.card-thumb{transform:scale(1.04)}
+  .card:hover .thumb{transform:scale(1.04)}
+  .card .overlay{position:absolute;top:0;left:0;z-index:2;display:flex;flex-direction:column;
+    padding:1.1rem 1.2rem}
+  .card .cat{color:rgba(255,255,255,.75);font-size:.7rem;letter-spacing:.08em;
+    text-transform:uppercase;margin-bottom:.2rem;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+  .card .title{color:#fff;font-family:var(--body);font-weight:400;font-size:.92rem;
+    text-shadow:0 1px 10px rgba(0,0,0,.4)}
+  .card .yr{position:absolute;top:1.1rem;right:1.2rem;z-index:2;color:rgba(255,255,255,.85);
+    font-size:.78rem;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 
   /* CONTACT */
   #contact{min-height:70vh}
@@ -187,7 +160,7 @@
   @keyframes breatheContact{0%,100%{transform:translate(-50%,-50%) scale(1)}
     50%{transform:translate(-50%,-50%) scale(1.28)}}
   #contact .sec-inner{min-height:70vh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:1rem 2rem 14rem}
+    align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 9rem}
   .contact-title{font-family:var(--display);font-weight:400;color:var(--ink);
     font-size:clamp(1.8rem,3.6vw,2.8rem);letter-spacing:-.02em;margin-bottom:.9rem}
   .contact-sub{color:var(--ink-soft);font-size:1.02rem;max-width:40ch;margin-bottom:2.6rem}
@@ -230,6 +203,10 @@
   .proj-img.grad{min-height:280px;background-size:cover;background-position:center}
   .proj-img img,.proj-img video{display:block;width:100%;height:auto;
     object-fit:contain;border-radius:14px}
+  .proj-img .compact-video-wrap{display:block;width:fit-content;max-width:100%;
+    margin:0 auto;border-radius:26px;overflow:hidden}
+  .proj-img .compact-video-wrap video{display:block;width:auto;max-height:72vh;
+    height:auto;border-radius:0}
 
   /* cute horizontal-scroll strip of illustrations */
   .proj-strip{display:flex;gap:1.1rem;overflow-x:auto;padding:.6rem .2rem 1.6rem;
@@ -247,90 +224,52 @@
   .next .lbl{color:var(--ink-faint);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
   .next .nm{font-family:var(--display);font-weight:500;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:-.02em}
 
-  /* ---------- ALL WORKS PAGE ---------- */
-  #allworks{position:fixed;inset:0;z-index:48;background:var(--bg);
-    overflow-x:hidden;overflow-y:auto;display:none}
-  #allworks.open{display:block;animation:viewIn .5s var(--ease) both}
-  #allworks.closing{display:block;animation:viewOut .35s var(--ease) both}
-  #allworks .sec-inner{padding:6rem 2rem 7rem}
-  .aw-head{display:flex;justify-content:space-between;align-items:flex-end;
-    gap:2rem;margin-bottom:2.8rem}
-  .aw-head h1{font-family:var(--display);font-weight:500;
-    font-size:clamp(2rem,4vw,3.2rem);line-height:.98;letter-spacing:-.025em}
-  .aw-head .meta{color:var(--ink-soft);font-size:.95rem;max-width:34ch;text-align:right}
-  .aw-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.2rem}
 
   @media(max-width:880px){
     nav{gap:1.1rem;padding:1.1rem 1.4rem;font-size:.95rem;flex-wrap:wrap}
     nav .links{gap:1.3rem}
-    .card.a,.card.b,.card.c,.card.d,.card.e,.card.f,.card.g{grid-column:span 12}
+    .grid{grid-template-columns:1fr}
+    .card.wide,.card.sq{grid-column:1/-1;aspect-ratio:4/3}
     #project .sec-inner{height:auto;overflow-y:auto}
     .project-overlay{overflow-y:auto}
     .proj-layout{grid-template-columns:1fr;gap:1.8rem;height:auto}
     .proj-left,.proj-right{height:auto;overflow-y:visible}
     .proj-left{border-right:none;padding-right:0;border-bottom:1px solid var(--line);padding-bottom:1.6rem}
-    #works .sec-inner,#about .sec-inner,#project .sec-inner,#allworks .sec-inner{padding-left:1.4rem;padding-right:1.4rem}
-    .aw-head{flex-direction:column;align-items:flex-start;gap:.8rem}
-    .aw-head .meta{text-align:left}
-    .aw-grid{gap:.8rem}
+    #works .sec-inner,#project .sec-inner{padding-left:1.4rem;padding-right:1.4rem}
   }
 </style>
 </head>
 <body data-section="home">
+
+  <div class="mesh-gradient"></div>
 
   <!-- fixed chrome -->
   <div class="chrome">
     <nav>
       <div class="links">
         <a data-go="home" class="active">Home</a>
-        <a data-go="about">About</a>
-        <a id="navWorks">My works</a>
-        <a data-go="about">CV</a>
+        <a data-go="works">Works</a>
+        <a href="about.html">About</a>
         <a data-go="contact">Contact</a>
       </div>
     </nav>
-    <div class="corner left">Aviv Cohen</div>
-    <div class="corner right">Graphic Designer</div>
   </div>
 
   <main>
     <!-- HOME -->
     <section class="section" id="home">
-      <div class="sec-bg"><div class="blob blue"></div></div>
-      <div class="skills">
-        <span class="skill s1">UI/UX</span>
-        <span class="skill s2">Branding</span>
-        <span class="skill s3">Vibe coding</span>
-        <span class="skill s4">Illustration</span>
-      </div>
-      <div class="scroll-hint" id="scrollHint" aria-label="Scroll down">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 4v15"/>
-          <path d="M5 12l7 7 7-7"/>
-        </svg>
+      <div class="sec-bg"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Hey, I&rsquo;m Aviv :)</h1>
+        <p class="hero-sub">My name is Aviv, a third-year Visual Communication student at Bezalel Academy. With a lifelong foundation in art and illustration, I&rsquo;ve developed a keen eye for visual language &ndash; now channeling that creative background into Product Design to transform passion into functional, impactful digital experiences.</p>
       </div>
     </section>
 
     <!-- WORKS -->
     <section class="section" id="works">
-      <div class="sec-bg"><div class="blob blue"></div><div class="blob red"></div></div>
+      <div class="sec-bg"><div class="blob blue"></div></div>
       <div class="sec-inner">
-        <h2 class="works-title">Recent works</h2>
         <div class="grid" id="grid"></div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="section" id="about">
-      <div class="sec-bg"><div class="blob red"></div><div class="blob blue"></div></div>
-      <div class="sec-inner">
-        <div class="about-grid">
-          <div class="about-title">About</div>
-          <div class="about-text-wrap">
-            <img class="about-photo" src="aviv-photo.jpg" alt="Aviv Cohen">
-            <p class="about-text">My name is Aviv, a third-year Visual Communication student at Bezalel Academy. With a lifelong foundation in art and illustration, I&rsquo;ve developed a keen eye for visual language &ndash; now channeling that creative background into Product Design to transform passion into functional, impactful digital experiences.</p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -364,18 +303,6 @@
     </section>
   </main>
 
-  <!-- ALL WORKS PAGE -->
-  <div id="allworks">
-    <div class="sec-bg"><div class="blob blue"></div><div class="blob red"></div></div>
-    <div class="sec-inner">
-      <span class="back" id="awBack">&larr; Back</span>
-      <div class="aw-head">
-        <h1>My works</h1>
-      </div>
-      <div class="aw-grid" id="awGrid"></div>
-    </div>
-  </div>
-
   <!-- PROJECT OVERLAY -->
   <div class="project-overlay" id="project">
     <div class="sec-bg"><div class="blob violet"></div><div class="blob pink"></div></div>
@@ -407,44 +334,6 @@ function cardMedia(p){
   if(p.video) return `<video class="card-thumb" src="${p.video}" poster="${p.img||''}" autoplay muted loop playsinline></video>`;
   return `<div class="thumb" style="background:${thumb(p)}"></div>`;
 }
-const PROJECTS = [
-  {id:0, cls:'a', title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO',
-   role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg', img1:'kodo-flow.mp4', img1Compact:true,
-   strip:['kodo-icon-led.png','kodo-icon-network.png','kodo-icon-screen.png','kodo-icon-button.png','kodo-icon-pi1.png','kodo-icon-pi2.png','kodo-icon-wires.png'],
-   lead:'Meet KODO! Where Montessori principles meet the vibecoding and cyber decks of today. Instead of raising more iPad kids, we believe the next generation will be one of creators and visionaries: with the right tools, of course.',
-   body:['With KODO, kids set up their own cyber decks and build their own games to play on them, returning a sense of agency and ownership over tech that we haven\u2019t had since the days of retro arcades.','Our vision is for classrooms to be full of students swapping decks and comparing games so screens don\u2019t keep isolating us, but rather bring back creativity and community.']},
-  {id:1, cls:'b', title:'Prism', cat:'UI / UX', year:'2024', client:'Prism',
-   role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
-   img1:'prism-flow.mp4', img2:'prism-promo.mp4',
-   lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
-   body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
-  {id:2, cls:'c', title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai',
-   role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', heroVideoCompact:true, img1:'milon-hai.jpg',
-   lead:'Milon Hai\u2019 is a concept app developed around a gap we identified among new immigrants in Israel: the lack of tools that teach the actual cultural context of local slang.',
-   body:['The result is an app that serves as a social and experiential platform, allowing users to \u2018collect\u2019 the Israeli street \u2014 from coffee shop slang to workplace expressions.','It goes beyond literal translations (\u2018what does it mean?\u2019), providing the full cultural context: tone, humor, and the situations in which each word is appropriately used.']},
-  {id:3, cls:'d', title:'Maskit.code', cat:'Branding / E-commerce', year:'2024', client:'Maskit.code',
-   role:'Brand Identity, Web Design', tools:'Figma, Illustrator', c1:'#2c2c30', c2:'#8a8a90', ang:140,
-   img:'maskit-cotton.jpg', heroVideo:'maskit-farm.mp4',
-   lead:'A digital archive reimagining Israel’s legendary Maskit fashion house as a living, browsable collection.',
-   body:['Each historic garment is presented like a museum plate — reference number, origin, medium and pattern — paired with a rendered lookbook shot.','The system carries the label’s heritage craft into a clean, catalogue-like digital format.']},
-];
-
-const grid = document.getElementById('grid');
-PROJECTS.forEach((p)=>{
-  const card = document.createElement('div');
-  card.className = 'card '+p.cls;
-  card.innerHTML = `
-    ${cardMedia(p)}
-    <span class="yr">${p.year}</span>
-    <div class="overlay"><div class="cat">${p.cat}</div><div class="title">${p.title}</div></div>`;
-  card.addEventListener('click',()=>openProject(p.id));
-  grid.appendChild(card);
-});
-const viewAllCard = document.createElement('div');
-viewAllCard.className = 'card e view-all-card';
-viewAllCard.innerHTML = `<span>View all works</span><span class="arrow">&rarr;</span>`;
-viewAllCard.addEventListener('click', ()=>openAllworks());
-grid.appendChild(viewAllCard);
 
 const body = document.body;
 document.querySelectorAll('nav a[data-go]').forEach(a=>{
@@ -452,9 +341,6 @@ document.querySelectorAll('nav a[data-go]').forEach(a=>{
     const el = document.getElementById(a.dataset.go);
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
   });
-});
-document.getElementById('scrollHint').addEventListener('click',()=>{
-  document.getElementById('works').scrollIntoView({behavior:'smooth', block:'start'});
 });
 const obs = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
@@ -467,7 +353,7 @@ const obs = new IntersectionObserver((entries)=>{
     }
   });
 },{rootMargin:'-45% 0px -45% 0px', threshold:0});
-['home','works','about','contact'].forEach(id=>obs.observe(document.getElementById(id)));
+['home','works','contact'].forEach(id=>obs.observe(document.getElementById(id)));
 
 function setProjImg(el, src, gradient, alt, compact){
   if(src){
@@ -475,7 +361,11 @@ function setProjImg(el, src, gradient, alt, compact){
     el.style.background = 'none';
     const compactStyle = compact ? ' style="max-height:72vh;width:auto;margin:0 auto"' : '';
     if(/\.(mp4|mov|webm)$/i.test(src)){
-      el.innerHTML = `<video src="${src}" autoplay muted loop playsinline${compactStyle}></video>`;
+      if(compact){
+        el.innerHTML = `<div class="compact-video-wrap"><video src="${src}" autoplay muted loop playsinline></video></div>`;
+      } else {
+        el.innerHTML = `<video src="${src}" autoplay muted loop playsinline></video>`;
+      }
     } else {
       el.innerHTML = `<img src="${src}" alt="${alt}"${compactStyle}>`;
     }
@@ -487,7 +377,7 @@ function setProjImg(el, src, gradient, alt, compact){
 }
 
 const overlay = document.getElementById('project');
-let activeList = PROJECTS;
+let activeList = null;
 function openProject(id, list){
   list = list || activeList;
   activeList = list;
@@ -528,26 +418,31 @@ function openProject(id, list){
   overlay.querySelector('.proj-left')?.scrollTo({top:0});
   body.classList.add('project-open');
   body.style.overflow='hidden';
+  if(p.title === 'Prism'){
+    body.dataset.theme = 'dark';
+  } else {
+    delete body.dataset.theme;
+  }
 }
 document.getElementById('back').addEventListener('click',()=>{
   overlay.classList.remove('open');
   overlay.classList.add('closing');
   overlay.addEventListener('animationend', ()=>overlay.classList.remove('closing'), {once:true});
+  delete body.dataset.theme;
   body.classList.remove('project-open');
-  if(allworksOpen){ return; }   /* opened from the works page -> stay on it */
   body.style.overflow='';
 });
 
 /* ---------- MY WORKS PAGE (separate page, grid of 10) ---------- */
 const ALLWORKS = [
-  {title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO', role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg', img1:'kodo-flow.mp4', img1Compact:true,
-   strip:['kodo-icon-led.png','kodo-icon-network.png','kodo-icon-screen.png','kodo-icon-button.png','kodo-icon-pi1.png','kodo-icon-pi2.png','kodo-icon-wires.png'],
-   lead:'Meet KODO! Where Montessori principles meet the vibecoding and cyber decks of today. Instead of raising more iPad kids, we believe the next generation will be one of creators and visionaries: with the right tools, of course.',
-   body:['With KODO, kids set up their own cyber decks and build their own games to play on them, returning a sense of agency and ownership over tech that we haven\u2019t had since the days of retro arcades.','Our vision is for classrooms to be full of students swapping decks and comparing games so screens don\u2019t keep isolating us, but rather bring back creativity and community.']},
   {title:'Prism', cat:'UI / UX', year:'2024', client:'Prism', role:'Product Design', tools:'Figma, Framer', c1:'#ff8a3d', c2:'#ffd64d', ang:160, img:'prism.jpg',
    img1:'prism-flow.mp4', img2:'prism-promo.mp4',
    lead:'A music collaboration platform where artists drop tracks and fans explore them like a deck of cards.',
    body:['I designed the desktop app end-to-end, from the swipeable drop carousel to the overall dark, studio-inspired visual language.','The interface stays quiet and out of the way, letting the artwork and music take center stage.']},
+  {title:'Kodo', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'KODO', role:'Brand Identity, Packaging', tools:'Figma, Illustrator', c1:'#5b6cff', c2:'#9aa6ff', ang:130, img:'kodo.jpg', heroImg:'kodo-hero.jpg', img1:'kodo-flow-cropped.mp4', img1Compact:true,
+   strip:['kodo-icon-led.png','kodo-icon-network.png','kodo-icon-screen.png','kodo-icon-button.png','kodo-icon-pi1.png','kodo-icon-pi2.png','kodo-icon-wires.png'],
+   lead:'Meet KODO! Where Montessori principles meet the vibecoding and cyber decks of today. Instead of raising more iPad kids, we believe the next generation will be one of creators and visionaries: with the right tools, of course.',
+   body:['With KODO, kids set up their own cyber decks and build their own games to play on them, returning a sense of agency and ownership over tech that we haven\u2019t had since the days of retro arcades.','Our vision is for classrooms to be full of students swapping decks and comparing games so screens don\u2019t keep isolating us, but rather bring back creativity and community.']},
   {title:'Milon Hai', cat:'Visual Identity \u2219 UI/UX', year:'2026', client:'Milon Hai', role:'Pattern Design, Merch', tools:'Illustrator, Photoshop', c1:'#e0447a', c2:'#f2c14e', ang:135, img:'milon-hai.jpg', heroVideo:'milon-hai-flow.mp4', heroVideoCompact:true, img1:'milon-hai.jpg',
    lead:'Milon Hai\u2019 is a concept app developed around a gap we identified among new immigrants in Israel: the lack of tools that teach the actual cultural context of local slang.',
    body:['The result is an app that serves as a social and experiential platform, allowing users to \u2018collect\u2019 the Israeli street \u2014 from coffee shop slang to workplace expressions.','It goes beyond literal translations (\u2018what does it mean?\u2019), providing the full cultural context: tone, humor, and the situations in which each word is appropriately used.']},
@@ -558,28 +453,22 @@ const ALLWORKS = [
   {title:'VOUCH', cat:'UI/UX · App Design · Digital Product', year:'2026', client:'Vouch', role:'Product Design', tools:'Figma', c1:'#e8a68c', c2:'#f2d9c9', ang:150, img:'vouch.jpg',
    lead:'Vouch is a UX/UI design concept for a social habit-building app, developed during an intensive one-week design sprint at UX studio at Bezalel to explore how shared accountability can overcome the limitations of individual discipline.',
    body:['By linking the progress of two partners through a “shared streak” mechanism, the app transforms habit-tracking into a social commitment, featuring a unique “Forgiveness Loop” for missed days and a peer-rating system to foster reliability.','Through user research, rapid wireframing, and a vibrant, emotional interface, Vouch merges psychological insights with intuitive interaction design, turning mundane daily routines into a meaningful and supportive social ritual.']},
-  {title:'rootea', cat:'Branding / Packaging', year:'2024', client:'rootea', role:'Brand Identity, Packaging', tools:'Illustrator, Photography', c1:'#4a4a52', c2:'#8a8a92', ang:125, img:'rootea.jpg',
-   lead:'A quiet, herbal identity for a loose-leaf tea brand built around simplicity and ritual.',
-   body:['A minimal wordmark and matte charcoal tags let the tea itself — dried petals, herbs, stems — take center stage.','The system stays understated across pyramid bags, labels and future packaging.']},
-  {title:'Netflix Dating', cat:'Illustration / Editorial', year:'2025', client:'Netflix', role:'Illustration', tools:'Procreate, Illustrator', c1:'#e0433d', c2:'#f2ded0', ang:135, img:'netflix-dating.jpg',
-   lead:'A warm illustration set exploring the small rituals of modern dating, made for a Netflix editorial feature.',
-   body:['Hand-drawn couples across sun-soaked picnic scenes, built with a loose line and a punchy red-on-cream palette.','Designed to work as a scrollable collage — playful, intimate, and a little voyeuristic.']},
   {title:'Digital Nomads', cat:'Illustration', year:'2023', client:'Editorial', role:'Illustration', tools:'Procreate, Illustrator', c1:'#8ea2ef', c2:'#c7d0f5', ang:120, img:'digital-nomads.jpg',
    lead:'A flat, friendly illustration series about the new rituals of remote work — laptops, coffee, and shared tables.',
    body:['Bold outlines and a cool blue-and-coral palette give the characters a light, editorial feel.','Built as a flexible cast that can be recomposed across articles, decks and social posts.']},
-  {title:'Double Life', cat:'Editorial / Illustration', year:'2024', client:'Personal', role:'Illustration, Editorial Design', tools:'Procreate, InDesign', c1:'#2f6b3a', c2:'#c23b1f', ang:145, img:'double-life.jpg',
-   lead:'An accordion-fold visual essay tracing a shift from green, familiar spaces into a warmer, stranger unknown.',
-   body:['A continuous painted strip moves scene by scene from a childhood garden into saturated red-orange rooms, paired with short Hebrew reflections.','The fold format lets the piece be read as one long journey or unfolded flat as a single image.']},
+  {title:'Netflix Dating', cat:'Illustration / Editorial', year:'2025', client:'Netflix', role:'Illustration', tools:'Procreate, Illustrator', c1:'#e0433d', c2:'#f2ded0', ang:135, img:'netflix-dating.jpg',
+   lead:'A warm illustration set exploring the small rituals of modern dating, made for a Netflix editorial feature.',
+   body:['Hand-drawn couples across sun-soaked picnic scenes, built with a loose line and a punchy red-on-cream palette.','Designed to work as a scrollable collage — playful, intimate, and a little voyeuristic.']},
+  {title:'rootea', cat:'Branding / Packaging', year:'2024', client:'rootea', role:'Brand Identity, Packaging', tools:'Illustrator, Photography', c1:'#4a4a52', c2:'#8a8a92', ang:125, img:'rootea.jpg',
+   lead:'A quiet, herbal identity for a loose-leaf tea brand built around simplicity and ritual.',
+   body:['A minimal wordmark and matte charcoal tags let the tea itself — dried petals, herbs, stems — take center stage.','The system stays understated across pyramid bags, labels and future packaging.']},
   {title:'GRUNGE', cat:'Editorial / Zine', year:'2025', client:'Grunge Zine', role:'Editorial Design, Art Direction', tools:'InDesign, Illustrator', c1:'#e8452e', c2:'#f2c14e', ang:150, img:'grunge.jpg',
    lead:'A neon, punk-inspired zine series built around the line “Grunge, lo met” — grunge isn’t dead.',
    body:['A bold, cropped wordmark letter anchors each issue, printed on a rotating set of loud fluorescent covers.','The stripped-down, photocopy-zine energy carries through typography, layout and the choice of paper stock.']},
-  {title:'Harvest', cat:'Illustration', year:'2023', client:'Packaging', role:'Illustration', tools:'Illustrator', c1:'#e0a83d', c2:'#f6d98a', ang:155,
-   lead:'Hand-built illustrations for a small-batch pantry brand.',
-   body:['Folk-inspired motifs across jars and labels.','A warm, earthy palette ties the range together.']},
 ];
 
-const awGrid = document.getElementById('awGrid');
-const AW_PATTERN = ['a','b','c','d','e','f','g'];
+const grid = document.getElementById('grid');
+const AW_PATTERN = ['wide','sq','sq'];
 ALLWORKS.forEach((p,i)=>{
   const card = document.createElement('div');
   card.className = 'card '+AW_PATTERN[i % AW_PATTERN.length];
@@ -588,26 +477,8 @@ ALLWORKS.forEach((p,i)=>{
     <span class="yr">${p.year}</span>
     <div class="overlay"><div class="cat">${p.cat}</div><div class="title">${p.title}</div></div>`;
   card.addEventListener('click',()=>openProject(i, ALLWORKS));
-  awGrid.appendChild(card);
+  grid.appendChild(card);
 });
-
-const allworks = document.getElementById('allworks');
-let allworksOpen = false;
-function openAllworks(){
-  allworks.classList.add('open');
-  allworks.scrollTo({top:0});
-  allworksOpen = true;
-  body.style.overflow='hidden';
-}
-function closeAllworks(){
-  allworks.classList.remove('open');
-  allworks.classList.add('closing');
-  allworks.addEventListener('animationend', ()=>allworks.classList.remove('closing'), {once:true});
-  allworksOpen = false;
-  body.style.overflow='';
-}
-document.getElementById('navWorks').addEventListener('click', openAllworks);
-document.getElementById('awBack').addEventListener('click', closeAllworks);
 </script>
 </body>
 </html>
